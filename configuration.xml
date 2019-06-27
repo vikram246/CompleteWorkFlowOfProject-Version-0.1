@@ -1,0 +1,65 @@
+<root>
+<SourceSystem Name ="MYSQL">
+	<Queries 
+		Query_1 = "SELECT accountid FROM account WHERE updated BETWEEN '%1' and current_timestamp"
+		Query_2 = "SELECT accountid FROM contact WHERE updated BETWEEN '%1' and current_timestamp"
+		Query_3 = "SELECT accountid FROM address WHERE updated BETWEEN '%1' and current_timestamp"
+		>
+	</Queries>
+	<RecordSnapshot_Queries
+		SQL="SELECT * FROM account"
+		AccountIdWhereClause=" where accountid = "
+		SQL_Contact="SELECT * FROM contact"
+		ContactIdWhereClause=" where accountid = "
+		SQL_Address="SELECT * FROM address"
+		AddressIdWhereClause=" where accountid = "
+		>
+	</RecordSnapshot_Queries>
+	<Properties
+		Queries_parameter = "3"
+		db.user = "root"
+		db.passwd = ""
+		db.url = "jdbc:mysql://localhost:3306/charter"
+		db.driver = "com.mysql.jdbc.Driver"
+
+		scheduler_Timer = "1000"
+
+		key = "Key1"
+		topicName = "avro"
+		bootstrap = "bootstrap.servers"
+		host = "localhost:9092"
+		keyserializer = "org.apache.kafka.common.serialization.StringSerializer"
+		valueserializer = "org.apache.kafka.common.serialization.StringSerializer"
+
+		keySerial = "key.serializer"
+		valueSerial = "value.serializer">
+	</Properties>
+
+	<Account SQL="SELECT * FROM account" AccountIdWhereClause=" where accountid = ">
+         
+
+		<Attribute SourceType="String" TargetType="String" SourceName="name" TargetName="Account_Name"></Attribute>
+		<Attribute SourceType="INT" TargetType="INT" SourceName="accountid" TargetName="Account_ID"></Attribute>
+		<Attribute SourceType="String" TargetType="String" SourceName="updated" TargetName="Updated_Date"></Attribute>
+
+	    <ChildEntity_Contact SQL="SELECT * FROM contact" ContactIdWhereClause=" where accountid = ">
+		  <Attribute SourceType="INT" TargetType="INT" SourceName="contactid" TargetName="Contact_ID"></Attribute>
+		  <Attribute SourceType="INT" TargetType="INT" SourceName="accountid" TargetName="Account_ID"></Attribute>
+		  <Attribute SourceType="String" TargetType="String" SourceName="fn" TargetName="FirstName"></Attribute>
+		  <Attribute SourceType="String" TargetType="String" SourceName="ln" TargetName="LastName"></Attribute>
+		  <Attribute SourceType="String" TargetType="String" SourceName="updated" TargetName="Updated_Date"></Attribute>
+		</ChildEntity_Contact>
+		
+		<ChildEntity_Address SQL="SELECT * FROM address" AddressIdWhereClause=" where accountid = ">
+		
+			<Attribute SourceType="INT" TargetType="INT" SourceName="addressid" TargetName="Address_ID"></Attribute>
+			<Attribute SourceType="INT" TargetType="INT" SourceName="accountid" TargetName="Account_ID"></Attribute>
+			<Attribute SourceType="INT" TargetType="INT" SourceName="contactid" TargetName="Contact_ID"></Attribute>
+			<Attribute SourceType="String" TargetType="String" SourceName="city" TargetName="City"></Attribute>
+			<Attribute SourceType="String" TargetType="String" SourceName="updated" TargetName="Updated_Date"></Attribute>
+		
+		</ChildEntity_Address>
+		
+	</Account>
+</SourceSystem>
+</root>
